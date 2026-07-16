@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <!-- MOBİL YÖNLENDİRME (Sıfır Gecikme, Sıfır Kasıntı) -->
+    <script>
+        // Tarayıcı genişliğine değil, doğrudan cihazın işletim sistemine (Telefon/Tablet mi?) bakar.
+        // Sadece site açılırken 1 kez çalışır, pencere küçültüp büyütürken sistemi ASLA yormaz.
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            window.location.replace("mobile.html");
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İnteraktif Oda V2</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="room-container">
+        <!-- PENCERE MANZARASI (EN ARKA KATMAN) -->
+        <div class="window-view">
+            <!-- Arka planda duran eski manzara -->
+            <div class="sky-layer" id="oldScene">
+                <img src="image/nature.webp" alt="Manzara">
+            </div>
+            <!-- Trenin arkasından sürüklenecek olan yeni manzara -->
+            <div class="sky-layer new-scene-layer" id="newScene">
+                <img src="image/nature.webp" alt="Yeni Manzara">
+            </div>
+            
+            <!-- YAĞMUR KATMANI (Manzaranın Önü, Trenin Arkası) -->
+            <div class="rain-overlay" id="rainOverlay"></div>
+            <!-- Tıklanabilir Uçan Tren -->
+            <img id="flyingTrain" class="flying-train" src="image/train.webp" alt="Uçan Tren">
+        </div>
+
+        <!-- ODANIN DUVARLARI VE MOBİLYALARI (ŞEFFAF CAMLI) -->
+        <div class="room-walls"></div>
+
+        <!-- Etkileşimli Eşyalar (En Önde) -->
+
+        <!-- Etkileşimli Eşyalar -->
+        <!-- Yüzdelik dilimlerle tam oturtulacak -->
+        <div class="prop corkboard" id="corkboardBtn" style="cursor: pointer; display: inline-block;">
+            <img src="image/pano.webp" alt="Pano" style="width: 100%; height: auto; display: block;">
+            <!-- Uzaktan görünen küçük kağıt detayları (Masaüstü odasındaki küçük panoyu doldurmak için) -->
+            <div class="diorama-pano-clone-wrapper">
+                <div class="pano-content diorama-pano-clone">
+                    <!-- Basit İletişim Kağıdı -->
+                    <div class="pano-item contact-paper">
+                        <div class="contact-links">
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                                Instagram
+                            </a>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                                E-Posta
+                            </a>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Hakkında (Sticker) Bölümü -->
+                    <div class="pano-item about-sticker-btn">
+                        <div class="stickers-wrapper">
+                            <img src="image/happy-hiy.webp" class="sticker-head hiy-head" alt="HIY Head">
+                            <img src="image/happy-mascot.webp" class="sticker-head mascot-head" alt="Mascot Head">
+                        </div>
+                        <div class="masking-tape">Hakkında</div>
+                    </div>
+
+                    <!-- To-Do List (Orta Alt) -->
+                    <div class="pano-item todo-list-paper">
+                        <h4 class="handwritten-text">Görevler:</h4>
+                        <ul class="handwritten-text">
+                            <li class="unchecked todo-item">Z içindeki dosyalara bak</li>
+                            <li class="unchecked todo-item">Atari'deki oyunları incele</li>
+                            <li class="unchecked todo-item">Treni kaçırma!</li>
+                        </ul>
+                    </div>
+
+                    <!-- Mini Lore Fotoğrafları (Köşelerde) -->
+                    <div class="pano-item lore-photo lore-photo-1">
+                        <img src="image/hiy-sea.webp" alt="HIY Deniz Kenarı">
+                    </div>
+                    <div class="pano-item lore-photo lore-photo-2">
+                        <img src="image/friend.webp" alt="HIY ve Z Arkadaş">
+                    </div>
+                    <div class="pano-item lore-photo lore-photo-3">
+                        <img src="image/train-mascot.webp" alt="Z Tren">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img class="prop cassette" id="cassetteBtn" src="image/kaset.webp" alt="Kaset">
+        <!-- Müzik notaları için kasetin hemen yanında görünmez bir alan -->
+        <div id="musicNotesContainer" style="position:absolute; top: 25.5%; left: 14.15%; width: 10%; height: 10%; pointer-events: none; z-index: 50;"></div>
+        <img class="prop gameboy" id="gameboyBtn" src="image/oyun.webp" alt="Oyun">
+        <!-- Tıklanabilir ve Yüzü Olan Maskot -->
+        <div class="prop mascot" id="mascotContainer">
+            <!-- Sinematik Animasyonlu Projeler Metni (3 Fazlı Döngü) -->
+            <div class="cinematic-projects-text">
+                <!-- Faz 1: Daktilo ve Ok -->
+                <div class="phase1-container">
+                    <span class="typewriter-text">PROJELER</span>
+                    <span class="bouncing-arrow">▼</span>
+                </div>
+                <!-- Faz 2: Parlama ve Dökülme -->
+                <div class="phase2-container">
+                    <span class="letter f1">P</span><span class="letter f2">R</span><span class="letter f3">O</span><span class="letter f1">J</span><span class="letter f2">E</span><span class="letter f3">L</span><span class="letter f1">E</span><span class="letter f2">R</span>
+                </div>
+                <!-- Faz 3: Şifre Çözücü ve CRT Kapanışı -->
+                <div class="phase3-container">
+                    <span class="glitch-text"></span>
+                </div>
+            </div>
+            <img src="image/mascot.webp" alt="Maskot" style="width: 100%; height: auto; display: block;">
+            <div class="mascot-face" id="mascotFace">
+                <!-- Gözler CSS üzerinden (::before) üretiliyor ki üzerine gelince (hover) ^ olabilsin -->
+                <span class="eye left-eye"></span>
+                <span class="mouth">_</span>
+                <span class="eye right-eye"></span>
+            </div>
+        </div>
+        <img class="prop plant" src="image/bitki.webp" alt="Bitki">
+
+        <!-- Masa Lambası -->
+        <img class="prop lamp" id="lampBtn" src="image/lamb.webp" alt="Lamba">
+        
+        <!-- Tıklanabilir ve Dumanı Tüten Kupa -->
+        <div class="prop mug" id="mugContainer">
+            <img src="image/kupa.webp" alt="Kupa" style="width: 100%; height: auto; display: block;">
+            <!-- Duman Efektleri (CSS ile uçuşacaklar) -->
+            <div class="smoke smoke-1"></div>
+            <div class="smoke smoke-2"></div>
+            <div class="smoke smoke-3"></div>
+        </div>
+        <!-- Sol Raftaki Mini Maskot (Fareyi Takip Eden) -->
+        <div class="prop mini-mascot" id="miniMascotContainer">
+            <img src="image/mini-mascot.webp" alt="Mini Maskot" style="width: 100%; height: auto; display: block;">
+            <div class="mascot-face mini-face" id="miniMascotFace">
+                <span class="eye left-eye"></span>
+                <span class="mouth">_</span>
+                <span class="eye right-eye"></span>
+            </div>
+
+            <!-- YENİ: Fare Üzerine Gelince Çıkan Buton Ekranı -->
+            <div class="mini-mascot-hover-ui">
+                <div class="green-btn"></div>
+            </div>
+        </div>
+
+        <!-- === PANO (CORKBOARD) ARAYÜZÜ (Başlangıçta Gizli) === -->
+        <div id="panoOverlay" class="game-overlay hidden">
+            <div class="pano-screen" style="background-image: url('image/pano.webp');">
+                <button id="closePanoBtn" title="Kapat">X</button>
+                
+                <div class="pano-content">
+                    <!-- Basit İletişim Kağıdı -->
+                    <div class="pano-item contact-paper">
+                        <div class="contact-links">
+                            <a href="https://instagram.com" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                                Instagram
+                            </a>
+                            <a href="mailto:ornek@mail.com" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                                E-Posta
+                            </a>
+                            <a href="https://github.com" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Hakkında (Sticker) Bölümü -->
+                    <div class="pano-item about-sticker-btn" id="aboutBtn">
+                        <div class="stickers-wrapper">
+                            <img src="image/happy-hiy.webp" class="sticker-head hiy-head" alt="HIY Head">
+                            <img src="image/happy-mascot.webp" class="sticker-head mascot-head" alt="Mascot Head">
+                        </div>
+                        <div class="masking-tape">Hakkında</div>
+                    </div>
+
+                    <!-- Hakkında Açılır Metin (Popup) -->
+                    <div class="about-popup hidden" id="aboutPopup">
+                        <button class="close-popup" id="closeAboutBtn">X</button>
+                        <h3 class="handwritten-text">Benim Hikayem</h3>
+                        <p class="handwritten-text">
+                            (Buraya daha sonra senin hikayeni yazacağız. Şimdilik bu metin yer tutucu olarak duruyor. Zzz maskotumuz ve maceralarımız yakında burada olacak!)
+                        </p>
+                    </div>
+
+                    <!-- To-Do List (Orta Alt) -->
+                    <div class="pano-item todo-list-paper">
+                        <h4 class="handwritten-text">Görevler:</h4>
+                        <ul class="handwritten-text" id="interactiveTodoList">
+                            <li class="unchecked todo-item">Z içindeki dosyalara bak</li>
+                            <li class="unchecked todo-item">Atari'deki oyunları incele</li>
+                            <li class="unchecked todo-item">Treni kaçırma!</li>
+                        </ul>
+                    </div>
+
+                    <!-- Mini Lore Fotoğrafları (Köşelerde) -->
+                    <div class="pano-item lore-photo lore-photo-1">
+                        <img src="image/hiy-sea.webp" alt="HIY Deniz Kenarı">
+                    </div>
+                    <div class="pano-item lore-photo lore-photo-2">
+                        <img src="image/friend.webp" alt="HIY ve Z Arkadaş">
+                    </div>
+                    <div class="pano-item lore-photo lore-photo-3">
+                        <img src="image/train-mascot.webp" alt="Z Tren">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- === OYUN KONSOLU ARAYÜZÜ (Başlangıçta Gizli) === -->
+        <div id="gameConsoleOverlay" class="game-overlay hidden">
+            <div class="retro-screen">
+                <div class="screen-header">
+                    <div style="display: flex; align-items: baseline; gap: 10px;">
+                        <span id="gameTitleText">YILAN OYUNU</span>
+                        <span style="font-size: 1vw;">| SKOR: <span id="gameScore">0</span></span>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="switchGameBtn" title="Oyunu Değiştir">→</button>
+                        <button id="closeConsoleBtn" title="Kapat">X</button>
+                    </div>
+                </div>
+                <div class="game-canvas-container">
+                    <!-- Yılan Oyunu -->
+                    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+                    <!-- Pong Oyunu (Başlangıçta Gizli) -->
+                    <canvas id="pongCanvas" width="400" height="400" class="hidden"></canvas>
+                </div>
+                <div class="screen-footer">
+                    <span id="gameFooterText">YILAN İÇİN YÖN veya W/A/S/D TUŞLARINI KULLAN</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === PROJELER (MASKOT İÇİ) ARAYÜZÜ === -->
+    <div id="projectsOverlay" class="game-overlay hidden projects-terminal">
+        <!-- CRT Ekran Çizgileri -->
+        <div class="crt-scanlines"></div>
+        
+        <!-- Çıkış butonu -->
+        <button id="closeProjectsBtn" class="terminal-close-btn">[X] BAĞLANTIYI KES</button>
+        
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <h1>> C:\SİSTEM\PROJELER_</h1>
+                <p>Bulunan Veriler: 3 Adet // Erişim İzni: ONAYLANDI</p>
+            </div>
+            
+            <div class="projects-grid">
+                <!-- Proje 1 -->
+                <div class="project-card">
+                    <div class="project-image-wrapper">
+                        <img src="image/nature.webp" alt="Proje 1">
+                        <div class="matrix-overlay"></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>PORTFOLYO SİTESİ</h3>
+                        <p>Kişisel portfolyo sitemin ilk sürümü. Klasik web dilleriyle oluşturulmuş temel tasarım.</p>
+                        <a href="#" target="_blank" class="project-btn">>>> İNCELE</a>
+                    </div>
+                </div>
+
+                <!-- Proje 2 -->
+                <div class="project-card">
+                    <div class="project-image-wrapper">
+                        <img src="image/pano.webp" alt="Proje 2">
+                        <div class="matrix-overlay"></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>DİJİTAL PANO UYGULAMASI</h3>
+                        <p>Kullanıcı etkileşimli, görev yöneticisi ve link entegrasyonlu dijital mantar pano uygulaması.</p>
+                        <a href="#" target="_blank" class="project-btn">>>> İNCELE</a>
+                    </div>
+                </div>
+
+                <!-- Proje 3 -->
+                <div class="project-card">
+                    <div class="project-image-wrapper">
+                        <img src="image/train.webp" alt="Proje 3">
+                        <div class="matrix-overlay"></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>TREN SİMÜLASYONU</h3>
+                        <p>Gelişmiş CSS animasyonları ve sonsuz arka plan döngüsü ile oluşturulmuş uçan tren demosu.</p>
+                        <a href="#" target="_blank" class="project-btn">>>> İNCELE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === MÜZİK ÇALAR ARAYÜZÜ (MINI PLAYER) === -->
+    <div id="musicPlayerWidget" class="music-widget hidden">
+        <div class="music-widget-header">
+            <span class="music-title">TAPE DECK V1.0</span>
+            <button id="closeMusicBtn" class="close-music">X</button>
+        </div>
+        <div class="music-screen">
+            <div class="music-marquee">
+                <span id="songNameDisplay">MÜZİK BEKLENİYOR...</span>
+            </div>
+            <div class="music-equalizer">
+                <span>|</span><span style="animation-delay: 0.1s">|</span><span style="animation-delay: 0.2s">|</span><span style="animation-delay: 0.3s">|</span><span style="animation-delay: 0.4s">|</span>
+            </div>
+        </div>
+        <div class="music-controls">
+            <button id="prevSongBtn" class="music-btn">|&lt;</button>
+            <button id="playPauseBtn" class="music-btn play-btn">||</button>
+            <button id="nextSongBtn" class="music-btn">&gt;|</button>
+        </div>
+    </div>
+
+    <!-- Etkileşim (Sihir) Kodlarımız -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
