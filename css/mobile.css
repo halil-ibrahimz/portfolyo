@@ -11,28 +11,117 @@
 }
 
 body {
-    background-color: #fcfaf5;
-    /* Çok uçuk, sıcak ve samimi krem rengi (Kahve kreması) */
+    background-color: #eee8d5;
+    /* Göz yormayan, bir ton daha koyu ve tok retro bej rengi */
+    
+    /* YENİ: Zarif Kareli Kağıt (Retro Grid) Deseni */
+    background-image: 
+        linear-gradient(rgba(92, 85, 75, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(92, 85, 75, 0.12) 1px, transparent 1px);
+    background-size: 30px 30px; /* Karelerin boyutu */
+    
     color: #333;
     /* Açık arka plan üzerinde koyu metin */
     font-family: 'Courier New', Courier, monospace;
     overflow-x: hidden;
-    overflow-y: hidden;
-    /* Tam ekran ortasında kalması için kaydırmayı kapat */
+    overflow-y: auto;
+    /* Kaydırmayı açtık (Z-Pattern hikaye akışı için) */
 }
 
 /* Koyu renkli, uzay/gece hissiyatlı arkaplan yerine beyaz */
 .mobile-room {
+    position: relative; /* Doodles absolute konumlandırması için */
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     /* Tam ekran yüksekliği */
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    /* Dikeyde tam ortaya al */
     align-items: center;
     background: transparent;
-    padding: 20px 0;
+}
+
+/* === ARKA PLAN KARALAMALARI (Doodles) === */
+.doodle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* İçeriğin tamamını kapsar */
+    pointer-events: none; /* Tıklamayı engellemesin */
+    z-index: -1; /* Her şeyin arkasında kalsın */
+    overflow: hidden;
+}
+
+.doodle {
+    position: absolute;
+    opacity: 0.75; /* Şeffaflık azaltıldı, artık çok daha net ve belirgin duruyorlar */
+    filter: grayscale(100%) contrast(150%); /* Kurşun kalem gibi siyah beyaz */
+    mix-blend-mode: multiply; /* Arka planla defter dokusu gibi kaynaşsın */
+}
+
+/* Kupa: Sol üstlerde bir yerde */
+.doodle-1 {
+    width: 120px;
+    top: 15%;
+    left: -10%;
+    transform: rotate(-15deg);
+}
+
+/* Kaset: Ortada sağda (1. sarkan maskotun oralar) */
+.doodle-2 {
+    width: 140px;
+    top: 35%;
+    right: -15%;
+    transform: rotate(25deg);
+}
+
+/* Oyun: Sol altlarda (2. sarkan maskotun oralar) */
+.doodle-3 {
+    width: 110px;
+    top: 60%;
+    left: -5%;
+    transform: rotate(-10deg);
+}
+
+/* Tren: En alt sağda */
+.doodle-4 {
+    width: 160px;
+    top: 85%;
+    right: 5%;
+    transform: rotate(15deg);
+}
+
+/* Bitki: Kasetin (sağda) karşısında sol tarafta */
+.doodle-5 {
+    width: 130px;
+    top: 28%; /* Daha yukarıya alındı */
+    left: -18%; /* Resmin bir kısmı ekran dışında kalsın diye çok daha sola çekildi */
+    transform: rotate(35deg); /* Belirgin eğim */
+}
+
+/* === GEÇİCİ HEADER === */
+.mobile-header {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.mobile-logo-img {
+    width: 200px; /* Logonun boyutu, duruma göre artırıp azaltabilirsin */
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Logoya hafif bir derinlik gölgesi */
+}
+
+/* === BÖLÜM 1: HERO (MASKOT VE OKLAR) === */
+.mobile-hero {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* === MASKOT (ÜST KISIM) === */
@@ -54,12 +143,53 @@ body {
     /* Resmin kendi gölgesini kaldırdık, yerine yer gölgesi (::after) ekledik */
 }
 
-/* === MASKOT YÜZÜ (Masaüstüyle Birebir Aynı) === */
+/* === BÖLÜM 2 & 3: HİKAYE AKIŞI (SARKAN MASKOTLAR) === */
+.story-section {
+    width: 100%;
+    min-height: 60vh;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 40px 0;
+}
+
+.peeking-mascot {
+    width: 220px; /* Maskotun boyutunu telefona göre ayarla */
+    height: auto;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+    /* Çok hafif bir sallanma/nefes alma efekti */
+    animation: gentleBreathe 4s ease-in-out infinite;
+}
+
+/* Soldan sarkan maskot ekranın dışından geliyormuş gibi sola yapışık */
+.peek-left {
+    margin-left: -25px; /* İstenilen oranda biraz daha içeriye (sola) çekildi */
+}
+
+/* Sağdan sarkan maskot ekranın sağına yapışık */
+.peek-right {
+    margin-right: -10px; /* Fazla gizlenmemesi için -40'tan -10'a çekildi */
+}
+
+/* Gelecekte eklenecek içerikler için esnek alan */
+.story-content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Hafif Nefes Alma Animasyonu */
+@keyframes gentleBreathe {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* === PROJELER ROZETİ (Maskotun üstündeki konuşma balonu) === */
 .mascot-face {
     position: absolute;
     /* GÖZÜN YUKARI/AŞAĞI KONUMU: Bu 'top' değerini değiştirerek milimetrik ayar yapabilirsin */
-    top: 38%;
-    /* Biraz daha aşağı kaydırıldı */
+    /* Orijinal mascot resminde bacaklar da olduğu için kafa daha yukarıda (eski 38% yerine 25% civarı) */
+    top: 25%;
     left: 49.5%;
     transform: translate(-50%, -50%);
     width: 99%;
@@ -159,53 +289,7 @@ body {
     /* Boyutları çok hafif küçültülerek daha orantılı hale getirildi */
 }
 
-/* === PROJELER ROZETİ (Maskotun üstündeki konuşma balonu) === */
-.projects-badge {
-    position: absolute;
-    top: 3px;
-    /* Maskota çok az daha yaklaştırıldı (aşağı indirildi) */
-    left: 50%;
-    transform: translateX(-50%);
-    background: transparent;
-    /* Arka plan balonu kaldırıldı, sadece yazı kaldı */
-    color: #33ff33;
-    /* Gözlerin neon yeşili */
-    padding: 6px 14px; /* Konumu bozulmasın diye iç boşluk korundu */
-    font-size: 11px;
-    font-weight: 900;
-    font-family: 'Courier New', Courier, monospace;
-    letter-spacing: 1px;
-    /* Kutu gölgesi silindi */
-    z-index: 10;
-    pointer-events: none;
-    animation: floatBadge 3s ease-in-out infinite;
-    text-transform: uppercase;
-}
-
-/* Rozetin altındaki küçük ok (Konuşma balonu hissi) */
-.projects-badge::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 5px 6px 0;
-    border-style: solid;
-    border-color: #33ff33 transparent transparent transparent;
-    /* Ok rengi artık balon krem rengi değil, yazının neon yeşili yapıldı */
-}
-
-@keyframes floatBadge {
-
-    0%,
-    100% {
-        transform: translate(-50%, 0);
-    }
-
-    50% {
-        transform: translate(-50%, -6px);
-    }
-}
+/* (Rozet kaldırıldı) */
 
 /* === PANO (ALT KISIM) === */
 .mobile-pano {
@@ -394,125 +478,181 @@ body {
     color: #000;
 }
 
-/* === SİBER KABLOLAR (SVG) === */
-.cable-system {
+/* === OK ÇEMBERİ VE MASKOT SARICISI === */
+.mascot-circle-wrapper {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle-arrow {
     position: absolute;
+    width: 65px; /* Oklar belirgin şekilde büyütüldü */
+    height: auto;
+    z-index: 4;
+}
+
+/* 8 Oku Çembere Dizme ve İçe Doğru Yönlendirme
+   translateX(-130px) oku merkezden 130px uzağa koyar.
+   Ok sağa (->) baktığı için, -X'e koyduğumuzda merkeze (sağa) doğru bakmış olur. */
+.arrow-1 { animation: floatInward1 3s ease-in-out infinite; } /* Sol */
+.arrow-2 { animation: floatInward2 3.2s ease-in-out infinite; } /* Sol Üst */
+.arrow-3 { animation: floatInward3 2.8s ease-in-out infinite; } /* Üst */
+.arrow-4 { animation: floatInward4 3.1s ease-in-out infinite; } /* Sağ Üst */
+.arrow-5 { animation: floatInward5 2.9s ease-in-out infinite; } /* Sağ */
+.arrow-6 { animation: floatInward6 3.3s ease-in-out infinite; } /* Sağ Alt */
+.arrow-7 { animation: floatInward7 3.0s ease-in-out infinite; } /* Alt */
+.arrow-8 { animation: floatInward8 2.7s ease-in-out infinite; } /* Sol Alt */
+
+/* Animate X translation to wobble inwards (Ortalama hareket seviyesi) */
+@keyframes floatInward1 {
+    0%, 100% { transform: rotate(0deg) translateX(-140px); }
+    50% { transform: rotate(0deg) translateX(-128px); }
+}
+@keyframes floatInward2 {
+    0%, 100% { transform: rotate(45deg) translateX(-140px); }
+    50% { transform: rotate(45deg) translateX(-128px); }
+}
+@keyframes floatInward3 {
+    0%, 100% { transform: rotate(90deg) translateX(-140px); }
+    50% { transform: rotate(90deg) translateX(-128px); }
+}
+@keyframes floatInward4 {
+    0%, 100% { transform: rotate(135deg) translateX(-140px); }
+    50% { transform: rotate(135deg) translateX(-128px); }
+}
+@keyframes floatInward5 {
+    0%, 100% { transform: rotate(180deg) translateX(-140px); }
+    50% { transform: rotate(180deg) translateX(-128px); }
+}
+@keyframes floatInward6 {
+    0%, 100% { transform: rotate(225deg) translateX(-140px); }
+    50% { transform: rotate(225deg) translateX(-128px); }
+}
+@keyframes floatInward7 {
+    0%, 100% { transform: rotate(270deg) translateX(-140px); }
+    50% { transform: rotate(270deg) translateX(-128px); }
+}
+@keyframes floatInward8 {
+    0%, 100% { transform: rotate(315deg) translateX(-140px); }
+    50% { transform: rotate(315deg) translateX(-128px); }
+}
+
+/* === ABOUT FOTOĞRAFI (BUTON) === */
+.about-button {
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+    margin-left: -40px; /* Resmi maskota (sola) doğru yaklaştırmak için eksi pay verildi */
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.about-button:active {
+    transform: scale(0.95); /* Dokunulduğunda hafifçe küçülme efekti */
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+}
+
+/* === ABOUT MODAL (OVERLAY) === */
+.modal-overlay {
+    position: fixed;
     top: 0;
     left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Arka planı hafifçe karartır */
+    backdrop-filter: blur(5px); /* Arka planı bulanıklaştırır (kasma yapmaz) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* En üstte durmasını sağlar */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none; /* Gizliyken tıklamaları engeller */
+}
+
+.modal-content {
+    background-color: #fcfaf5; /* Defter kağıdı rengi */
+    width: 85%;
+    max-width: 400px;
+    border-radius: 12px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid #333; /* Indie game tarzı kalın çizgi */
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Tatlı bir sıçrama (bounce) animasyonu */
+}
+
+.modal-overlay.hidden .modal-content {
+    transform: scale(0.8); /* Gizliyken küçüktür, açılırken büyür */
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.modal-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 900;
+    -webkit-text-stroke: 1px #333;
+    color: #fcfaf5;
+}
+
+.modal-body p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #333;
+    font-family: sans-serif;
+}
+
+/* === SOSYAL MEDYA (KURŞUN KALEM İKONLARI) === */
+.social-links {
+    display: flex;
+    flex-direction: column; /* Üst üste dizilsinler */
+    gap: 20px; /* Aralarındaki boşluk */
+    align-items: flex-end; /* Maskota (sağa) yakın dursunlar */
+    margin-right: 20px;
+}
+
+.social-icon {
+    width: 45px;
+    height: 45px;
+    color: #333; /* Kapkoyu kurşun kalem rengi */
+    opacity: 0.6;
+    mix-blend-mode: multiply; /* Kağıda işlenmiş hissi */
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.15));
+}
+
+/* Kasten yamukluk veriyoruz ki dağınık karalama gibi dursunlar */
+.social-icon:nth-child(1) { transform: rotate(-8deg); }
+.social-icon:nth-child(2) { transform: rotate(5deg); }
+.social-icon:nth-child(3) { transform: rotate(-4deg); }
+
+.social-icon:active {
+    transform: scale(0.9) rotate(0deg);
+    opacity: 1; /* Basılınca netleşsin */
+}
+
+.social-icon svg {
     width: 100%;
     height: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-.cyber-cable {
-    fill: none;
-    stroke: #33ff33;
-    /* Gözlerin rengiyle aynı fosforlu neon yeşil */
-    stroke-width: 3.5px;
-    stroke-dasharray: 8, 8;
-    animation: dataFlow 2s linear infinite;
-    filter: drop-shadow(0 0 2px rgba(51, 255, 51, 0.4));
-    /* Parlamayı iyice kıstık (Soft glow) */
-    opacity: 0.5;
-    /* Genel parlaklığı kıstık */
-}
-
-@keyframes dataFlow {
-    from {
-        stroke-dashoffset: 16;
-    }
-
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
-/* === YÜZEN DÜĞÜMLER (ÇIPLAK İKONLAR) === */
-.cyber-node {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: transparent;
-    /* Arka plan yok */
-    border: none;
-    box-shadow: none;
-    /* Gölge yok */
-
-    z-index: 3;
-    cursor: grab;
-    user-select: none;
-    touch-action: none;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-    /* Dokunma alanı için biraz iç boşluk (padding) ekleyelim */
-    padding: 10px;
-}
-
-.cyber-node:active {
-    cursor: grabbing;
-    transform: scale(0.85);
-    /* Basınca sadece ikon küçülür */
-}
-
-/* Şekil Varyasyonları (Artık arka plan olmadığı için sadece alan belirtirler) */
-.node-icon {
-    /* Özel genişliklere gerek kalmadı, padding ile hallettik */
-}
-
-.node-pill {
-    /* Özel genişliklere gerek kalmadı, padding ile hallettik */
-}
-
-/* İçerik Stilleri (İkonlar ve Resimler) */
-.node-content {
-    pointer-events: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    /* KABLO GİZLEME (KAMUFLAJ): 
-       Arka planı sildiğimizde kablolar şeffaf ikonların tam arkasından geçip görüntüyü bölüyordu.
-       Ana arka plan rengiyle aynı rengi vererek kabloyu gizledik, böylece ikonlar yine boşlukta gibi duruyor! */
-    background-color: #fcfaf5;
-    border-radius: 50px;
-    /* Yuvarlak kamuflaj */
-    padding: 2px;
-}
-
-.node-content svg {
-    width: 45px;
-    /* İkonlar daha büyük ve belirgin */
-    height: 45px;
-    fill: #5c554b;
-    filter: drop-shadow(0 4px 8px rgba(180, 160, 140, 0.3));
-    /* İkona hafif derinlik (gölge) */
-}
-
-.stickers-content {
-    display: flex;
-    gap: 2px;
-}
-
-.mobile-sticker {
-    width: 55px;
-    /* Kafalar daha büyük ve belirgin */
-    height: auto;
-    filter: drop-shadow(0 4px 8px rgba(180, 160, 140, 0.3));
-}
-
-/* HIY Kafası (Sol) - Çene sağa (içe) bakacak şekilde yatık */
-.hiy-head {
-    transform: rotate(-15deg);
-    margin-right: -15px;
-    /* Maskot kafasını daha çok kendine çekmesi için -15px yapıldı */
-    z-index: 2;
-}
-
-/* Z Maskot Kafası (Sağ) - Çene sola (içe) bakacak şekilde yatık */
-.mascot-head {
-    transform: rotate(15deg);
-    z-index: 1;
 }
