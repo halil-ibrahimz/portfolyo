@@ -54,9 +54,8 @@ body {
 
 .doodle {
     position: absolute;
-    opacity: 0.75; /* Şeffaflık azaltıldı, artık çok daha net ve belirgin duruyorlar */
-    filter: grayscale(100%) contrast(150%); /* Kurşun kalem gibi siyah beyaz */
-    mix-blend-mode: multiply; /* Arka planla defter dokusu gibi kaynaşsın */
+    /* Saydamlık, siyah beyaz filtresi ve kaynaşma modları (mix-blend-mode) tamamen kaldırıldı */
+    /* Resimler üretildiği en net, ham halleriyle görünecek */
 }
 
 /* Kupa: Sol üstlerde bir yerde */
