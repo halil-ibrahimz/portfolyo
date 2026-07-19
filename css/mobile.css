@@ -91,12 +91,13 @@ body {
     transform: rotate(15deg);
 }
 
-/* Bitki: Kasetin (sağda) karşısında sol tarafta */
+/* Bitki: Logo ile ana maskot arasında (Sağ üstten sarkıyor) */
 .doodle-5 {
-    width: 130px;
-    top: 28%; /* Daha yukarıya alındı */
-    left: -18%; /* Resmin bir kısmı ekran dışında kalsın diye çok daha sola çekildi */
-    transform: rotate(35deg); /* Belirgin eğim */
+    width: 140px;
+    top: 1%; /* Çok çok az daha yukarı alındı */
+    right: -12%; /* Ekranın sağından içeri giriyormuş gibi */
+    left: auto; /* Soldaki hizalamayı iptal et */
+    transform: rotate(-35deg); /* Sola doğru (içeri) eğilmesi için eksi değer verildi */
 }
 
 /* === GEÇİCİ HEADER === */
@@ -110,9 +111,10 @@ body {
 }
 
 .mobile-logo-img {
-    width: 200px; /* Logonun boyutu, duruma göre artırıp azaltabilirsin */
+    width: 250px; /* Logoyu belirgin ve okunur yapmak için büyüttük */
     height: auto;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Logoya hafif bir derinlik gölgesi */
+    transform: translateX(8px); /* Görselin ağırlık merkezine göre tam ortalanması için çok hafif sağa itildi */
+    filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.15));
 }
 
 /* === BÖLÜM 1: HERO (MASKOT VE OKLAR) === */
@@ -131,7 +133,8 @@ body {
     max-width: 250px;
     cursor: pointer;
     z-index: 5;
-    /* Kabloların önünde (arkasından çıkıyormuş hissi) durması için */
+    /* Gözlerin resme göre kusursuz küçülüp büyümesi için Container (Kutu) yapısı kuruyoruz */
+    container-type: inline-size;
 }
 
 /* Sonsuz Zemin (Stüdyo) Gölgesi KALDIRILDI */
@@ -187,74 +190,60 @@ body {
 /* === PROJELER ROZETİ (Maskotun üstündeki konuşma balonu) === */
 .mascot-face {
     position: absolute;
-    /* GÖZÜN YUKARI/AŞAĞI KONUMU: Bu 'top' değerini değiştirerek milimetrik ayar yapabilirsin */
-    /* Orijinal mascot resminde bacaklar da olduğu için kafa daha yukarıda (eski 38% yerine 25% civarı) */
-    top: 25%;
-    left: 49.5%;
+    /* Yüzde değerleri ile konumlandırma (Resimle birlikte hareket eder) */
+    top: 23%; /* Biraz daha yukarı çekildi */
+    left: 50%;
     transform: translate(-50%, -50%);
-    width: 99%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1%;
+    gap: 0; /* Boşluklar margin ile kontrol edilecek */
     z-index: 2;
     pointer-events: none;
 
     font-family: 'Courier New', Courier, monospace;
     color: #33ff33;
-    /* Hacker yeşili */
     text-shadow: 0 0 5px #33ff33, 0 0 15px #33ff33;
-    /* Parlama */
 }
 
 /* Masaüstündeki "_ _" Göz Karakteri Mantığı */
 .eye {
     display: inline-block;
-    font-size: 7vw;
-    /* Ekran genişliğine göre esnek (Farklı telefonlarda bozulmaz) */
-    font-weight: 900;
+    /* MUCİZE KOD: Font boyutunu tüm ekrana göre değil, sadece "maskotun boyutuna" göre ayarlar */
+    font-size: 16cqw;
+    font-weight: bold;
     transform: scaleY(2.43);
     /* Gözü dikeyde uzatarak CRT ekran piksellerine benzet */
     transition: transform 0.1s ease, top 0.1s ease;
 }
 
 @media (min-width: 450px) {
-
-    /* Tablet veya büyük telefonlarda aşırı büyümemesi için kilitleme */
-    .eye {
-        font-size: 25px;
-    }
-
-    .mouth {
-        font-size: 35px !important;
-    }
+    /* Tablet veya büyük telefonlarda aşırı büyümemesi için kilitleme (Artık cqw kullandığımız için buna pek gerek yok ama tedbir amaçlı kalsın) */
+    .eye { font-size: 30px; }
+    .mouth { font-size: 40px !important; }
 }
 
 .eye::before {
     content: '_';
 }
 
-.left-eye {
+/* Eski "vw" (ekrana göre) kaydırma ayarları iptal edildi */
+.left-eye, .right-eye {
     position: relative;
-    left: 1px;
-    top: -5vw;
-}
-
-.right-eye {
-    position: relative;
-    right: 1px;
-    top: -5vw;
+    top: -4cqw; /* Gözler ağzın hizasına gelsin diye daha yukarı çekildi */
 }
 
 .mouth {
     display: inline-block;
-    font-size: 10vw;
-    /* Esnek ağız boyutu büyütüldü */
+    font-size: 20cqw; /* Ağız da resme göre orantılandı */
     font-weight: 900;
-    transform: scaleY(1.8);
-    /* Dikey olarak da biraz daha kalınlaştı */
+    transform: scaleY(1.5);
+    position: relative;
+    top: 10cqw; /* Ağız çok az daha aşağıya indirildi */
     color: #33ff33;
     text-shadow: 0 0 5px #33ff33;
+    margin: 0 1cqw; /* Margin azaltılarak gözler birbirine yaklaştırıldı */
 }
 
 /* === TIKLANINCA MUTLU OLMA (^ _ ^) === */
@@ -268,8 +257,7 @@ body {
 
 .mascot-face.happy .left-eye,
 .mascot-face.happy .right-eye {
-    top: 5vw;
-    /* Şapka (^) karakteri doğal olarak yukarıda durduğu için 'top' değerini artırarak daha aşağı çektik */
+    top: 14cqw; /* ^ karakteri en tepede çizildiği için, normal gözlerin (_) hizasına inmesi adına epeyce aşağı itildi */
 }
 
 /* === KABLOLARI ÇEKERKEN ZORLANMA / ODAKLANMA (> _ <) === */
