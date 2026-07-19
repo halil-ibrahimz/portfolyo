@@ -191,7 +191,7 @@ body {
 .mascot-face {
     position: absolute;
     /* Yüzde değerleri ile konumlandırma (Resimle birlikte hareket eder) */
-    top: 23%; /* Biraz daha yukarı çekildi */
+    top: 25%; /* Bütün yüz grubu biraz daha aşağıya indirildi (Eski 23%) */
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
@@ -213,7 +213,7 @@ body {
     /* MUCİZE KOD: Font boyutunu tüm ekrana göre değil, sadece "maskotun boyutuna" göre ayarlar */
     font-size: 16cqw;
     font-weight: bold;
-    transform: scaleY(2.43);
+    transform: scaleY(2.43) scaleX(1.1); /* Yatay uzunluğu 1.1 oranına çekildi */
     /* Gözü dikeyde uzatarak CRT ekran piksellerine benzet */
     transition: transform 0.1s ease, top 0.1s ease;
 }
@@ -243,7 +243,7 @@ body {
     top: 10cqw; /* Ağız çok az daha aşağıya indirildi */
     color: #33ff33;
     text-shadow: 0 0 5px #33ff33;
-    margin: 0 1cqw; /* Margin azaltılarak gözler birbirine yaklaştırıldı */
+    margin: 0 0.5cqw; /* Margin 1'den 0.5'e çekilerek gözler birbirine çok az daha yaklaştırıldı */
 }
 
 /* === TIKLANINCA MUTLU OLMA (^ _ ^) === */
