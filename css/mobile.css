@@ -238,7 +238,7 @@ body {
     display: inline-block;
     font-size: 20cqw; /* Ağız da resme göre orantılandı */
     font-weight: 900;
-    transform: scaleY(1.5);
+    transform: scaleY(1.7) scaleX(1.25); /* Dikey kalınlık korundu, yayvanlık (yatay) azaltıldı */
     position: relative;
     top: 10cqw; /* Ağız çok az daha aşağıya indirildi */
     color: #33ff33;
